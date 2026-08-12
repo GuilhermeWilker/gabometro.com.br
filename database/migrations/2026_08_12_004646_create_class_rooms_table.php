@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('class_rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('grade_level')->nullable(); // ex: "2º Ensino Médio"
+            $table->string('section')->unique(); // ex: "A", "B", "C"
             $table->string('academic_year', 4)->nullable(); // ex: "2026"
             $table->timestamps();
         });
