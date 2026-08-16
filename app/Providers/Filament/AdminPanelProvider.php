@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\LoginPage;
 use Filament\Enums\UserMenuPosition;
 
 use Filament\Http\Middleware\Authenticate;
@@ -31,8 +32,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->sidebarWidth('15rem')
-            ->login()
+            // ->sidebarWidth('15rem')
+            ->login(LoginPage::class)
             ->colors([
                 'primary' => Color::Blue,
             ])

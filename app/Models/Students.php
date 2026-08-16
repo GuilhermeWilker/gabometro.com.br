@@ -10,7 +10,7 @@ class Students extends Model
 {
     protected $guarded = ['id'];
 
-    public function turma(): BelongsTo
+    public function classRoom(): BelongsTo
     {
         return $this->belongsTo(ClassRoom::class);
     }

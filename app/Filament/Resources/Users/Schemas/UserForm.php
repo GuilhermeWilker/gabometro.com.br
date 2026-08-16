@@ -19,7 +19,6 @@ class UserForm
                     ->label('Email address')
                     ->email()
                     ->required(),
-                // DateTimePicker::make('email_verified_at'),
                 Select::make('role')->options([
                     'Administrador' => 'Administrador',
                     'Coodernador' => 'Coodernador',
@@ -27,7 +26,10 @@ class UserForm
                 ])->required(),
                 TextInput::make('password')
                     ->password()
-                    ->required(),
+                    ->revealable()
+                    ->required(fn(string $operation): bool => $operation === 'create')
+                    ->visible(fn(string $operation): bool => $operation === 'create')
+                    ->dehydrateStateUsing(fn($state) => \Illuminate\Support\Facades\Hash::make($state)),
             ]);
     }
 }

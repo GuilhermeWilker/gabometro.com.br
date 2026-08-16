@@ -29,15 +29,15 @@ class UsersTableColumns
                 ->label('Função do usuário')
                 ->badge()
                 ->icon(fn(string $state): Heroicon => match ($state) {
-                    'admin' => Heroicon::ShieldCheck,
-                    'coordinator' => Heroicon::UserGroup,
-                    'teacher' => Heroicon::AcademicCap,
+                    'Administrador' => Heroicon::ShieldCheck,
+                    'Coodernador' => Heroicon::UserGroup,
+                    'Professor' => Heroicon::AcademicCap,
                     default => Heroicon::User,
                 })
                 ->color(fn(string $state): string => match ($state) {
-                    'admin' => 'primary',
-                    'coordinator' => 'warning',
-                    'teacher' => 'success',
+                    'Administrador' => 'primary',
+                    'Coodernador' => 'warning',
+                    'Professor' => 'success',
                     default => 'gray',
                 }),
             TextColumn::make('email')
