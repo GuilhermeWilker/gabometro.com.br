@@ -32,10 +32,12 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            // ->sidebarWidth('15rem')
+            ->brandLogo(asset('assets/gabometro-logo-light.svg'))
+            ->darkModeBrandLogo(asset('assets/gabometro-logo-dark.svg'))
+            ->brandLogoHeight('4.5rem')
             ->login(LoginPage::class)
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Indigo,
             ])
             ->topNavigation()
             ->spa()
