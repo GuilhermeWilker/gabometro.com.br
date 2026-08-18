@@ -58,9 +58,9 @@ class StudentsResource extends Resource
     {
         return [
             'index' => ListStudents::route('/'),
-            'create' => CreateStudents::route('/create'),
+            // 'create' => CreateStudents::route('/create'),
             'view' => ViewStudents::route('/{record}'),
-            'edit' => EditStudents::route('/{record}/edit'),
+            // 'edit' => EditStudents::route('/{record}/edit'),
         ];
     }
 }
