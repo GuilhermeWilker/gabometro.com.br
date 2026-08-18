@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\LoginPage;
+use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Enums\UserMenuPosition;
 
 use Filament\Http\Middleware\Authenticate;
@@ -32,9 +33,10 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandLogo(asset('assets/gabometro-logo-light.svg'))
             ->darkModeBrandLogo(asset('assets/gabometro-logo-dark.svg'))
-            ->brandLogoHeight('4.5rem')
+            ->brandLogoHeight('3.7rem')
             ->login(LoginPage::class)
             ->colors([
                 'primary' => Color::Indigo,
@@ -68,6 +70,11 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()
                     ->label('Schhool')
                     ->icon(Heroicon::BuildingOffice2),
-            ]);;
+            ])
+            ->plugins([
+                AuthUIEnhancerPlugin::make()
+                    ->formPanelPosition('left')
+                    ->formPanelWidth('35%')
+            ]);
     }
 }
