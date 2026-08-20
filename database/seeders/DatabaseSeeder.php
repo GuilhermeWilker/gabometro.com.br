@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Env;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Guilherme Wilker',
-            'email' => 'wilkerguilherme0@gmail.com',
+            'email' => "wilkerguilherme0" . Env::get('MAIL_DOMAIN'),
             'role' => 'Administrador',
         ]);
     }
