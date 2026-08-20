@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Assessments\Pages;
 
 use App\Filament\Resources\Assessments\AssessmentResource;
+use App\Imports\AssessmentResultsImport;
 use App\Models\ClassRoom;
 use Filament\Actions\CreateAction;
 use Filament\Forms\Components\DatePicker;
@@ -16,6 +17,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Support\Icons\Heroicon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ListAssessments extends ListRecords
 {
@@ -100,7 +102,11 @@ class ListAssessments extends ListRecords
                 })
                 // assim que o Assessment é criado, processa a planilha automaticamente
                 ->after(function ($record): void {
-                    dd($record);
+                    Excel::import(
+                        new AssessmentResultsImport($record),
+                        $record->spreadsheet_path,
+                        'local'
+                    );
                 }),
         ];
     }

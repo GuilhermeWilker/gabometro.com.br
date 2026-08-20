@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('assessment_results', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Assessment::class)->unique()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Students::class)->unique()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Assessment::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Students::class)->constrained()->cascadeOnDelete();
+            $table->unique(['assessment_id', 'students_id']);
+
             $table->unsignedSmallInteger('correct_answers')->default(0);
             $table->unsignedSmallInteger('incorrect_answers')->default(0);
             $table->unsignedSmallInteger('total_questions')->default(0);

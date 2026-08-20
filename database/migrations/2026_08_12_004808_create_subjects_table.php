@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('abbreviation')->nullable();
-            $table->unsignedSmallInteger('total_questions')->nullable();
+            $table->string('name')->nullable();
+            $table->string('abbreviation')->unique();
             $table->timestamps();
         });
     }

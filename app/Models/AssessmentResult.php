@@ -14,13 +14,17 @@ class AssessmentResult extends Model
     {
         return $this->belongsTo(Assessment::class);
     }
+
+
     public function student(): BelongsTo
     {
         return $this->belongsTo(Students::class);
     }
+
     public function subjects(): BelongsToMany
     {
-        return $this->belongsToMany(Subject::class, 'assessment_result_subject')
-            ->withPivot('acertos');
+        return $this->belongsToMany(Subject::class)
+            ->withPivot('correct_answers')
+            ->withTimestamps();
     }
 }
