@@ -28,11 +28,6 @@ class UserResource extends Resource
     protected static ?string $label = 'Usuários';
     protected static ?string $navigationLabel = 'Usuários';
 
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
     public static function form(Schema $schema): Schema
     {
         return UserForm::configure($schema);

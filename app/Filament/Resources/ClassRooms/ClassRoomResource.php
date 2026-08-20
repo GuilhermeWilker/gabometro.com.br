@@ -24,7 +24,7 @@ class ClassRoomResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingOffice;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Configurações da Organização';
+    protected static string | UnitEnum | null $navigationGroup = 'Acadêmico';
 
     protected static ?string $recordTitleAttribute = 'ClassRooms list';
 

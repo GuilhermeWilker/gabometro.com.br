@@ -13,15 +13,21 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class AssessmentResource extends Resource
 {
     protected static ?string $model = Assessment::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ClipboardDocumentList;
+    protected static string | UnitEnum | null $navigationGroup = 'Acadêmico';
     protected static ?string $recordTitleAttribute = 'Assessment list';
+    protected static ?string $label = 'Lista de simulados';
+    protected static ?string $navigationLabel = 'Simulados';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
     public static function form(Schema $schema): Schema
     {
         return AssessmentForm::configure($schema);

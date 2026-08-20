@@ -27,6 +27,8 @@ class ListAssessments extends ListRecords
     {
         return [
             CreateAction::make()
+                ->label("Criar um novo simulado")
+                ->icon(Heroicon::Plus)
                 ->schema([
                     Wizard::make([
                         Step::make('Informações Gerais')
