@@ -4,12 +4,14 @@ namespace App\Filament\Resources\Assessments\Pages;
 
 use App\Filament\Resources\Assessments\AssessmentResource;
 use App\Imports\AssessmentResultsImport;
+use App\Jobs\ImportAssessmentResults;
 use App\Models\ClassRoom;
 use Filament\Actions\CreateAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\Pages\ListRecords;
@@ -104,11 +106,14 @@ class ListAssessments extends ListRecords
                 })
                 // assim que o Assessment é criado, processa a planilha automaticamente
                 ->after(function ($record): void {
-                    Excel::import(
-                        new AssessmentResultsImport($record),
-                        $record->spreadsheet_path,
-                        'local'
-                    );
+                    ImportAssessmentResults::dispatch($record->id);
+
+                    Notification::make()
+                        ->title('Simulado recebido com sucesso!')
+                        ->body('Os resultados dos estudantes estão sendo processados em segundo plano.')
+                        ->icon('heroicon-o-document-text')
+                        ->iconColor('success')
+                        ->send();
                 }),
         ];
     }
