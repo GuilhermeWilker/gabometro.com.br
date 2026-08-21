@@ -10,7 +10,9 @@ class Assessment extends Model
 {
     protected $guarded = ['id'];
 
-    protected $casts = ['data_realizacao' => 'date'];
+    protected $casts = [
+        'assessment_date' => 'date',
+    ];
     public function classRoom(): BelongsTo
     {
         return $this->belongsTo(ClassRoom::class);

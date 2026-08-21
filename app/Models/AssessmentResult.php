@@ -27,4 +27,13 @@ class AssessmentResult extends Model
             ->withPivot('correct_answers')
             ->withTimestamps();
     }
+
+    public function subjectResults()
+    {
+        return $this->subjects->mapWithKeys(
+            fn($subject) => [
+                $subject->name => $subject->pivot->correct_answers,
+            ]
+        );
+    }
 }
