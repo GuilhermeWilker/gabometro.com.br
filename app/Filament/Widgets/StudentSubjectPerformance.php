@@ -60,7 +60,7 @@ class StudentSubjectPerformance extends ChartWidget
             ],
 
             'labels' => $subjects
-                ->pluck('abbrevitation')
+                ->pluck('abbreviation')
                 ->values()
                 ->toArray(),
         ];

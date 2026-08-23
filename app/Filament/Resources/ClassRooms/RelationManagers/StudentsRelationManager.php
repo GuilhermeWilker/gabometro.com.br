@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\ClassRooms\RelationManagers;
 
+use App\Filament\Resources\Students\StudentsResource;
+use Filament\Actions\Action;
 use Filament\Actions\AssociateAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -68,6 +70,15 @@ class StudentsRelationManager extends RelationManager
                 AssociateAction::make(),
             ])
             ->recordActions([
+                Action::make('view')
+                    ->label('Ver mais')
+                    ->icon(Heroicon::Eye)
+                    ->url(
+                        fn($record) => StudentsResource::getUrl('view', [
+                            'record' => $record,
+                        ])
+                    ),
+
                 EditAction::make(),
                 DissociateAction::make(),
                 DeleteAction::make(),
