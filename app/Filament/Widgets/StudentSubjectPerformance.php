@@ -53,14 +53,7 @@ class StudentSubjectPerformance extends ChartWidget
                 [
                     'label' => 'Aproveitamento',
                     'data' => $subjects
-                        ->map(function ($subject) {
-                            /*
-                             * Aqui precisamos da quantidade total
-                             * de questões da matéria para calcular
-                             * o percentual.
-                             */
-                            return $subject->pivot->correct_answers;
-                        })
+                        ->map(fn($subject) => (int) $subject->pivot->correct_answers)
                         ->values()
                         ->toArray(),
                 ],
