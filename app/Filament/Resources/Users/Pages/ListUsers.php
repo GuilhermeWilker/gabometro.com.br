@@ -3,14 +3,16 @@
 namespace App\Filament\Resources\Users\Pages;
 
 use App\Filament\Resources\Users\UserResource;
+use App\Models\User;
 use Filament\Actions\CreateAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Hash;
 
 class ListUsers extends ListRecords
 {
@@ -34,25 +36,37 @@ class ListUsers extends ListRecords
                                 TextInput::make('email')
                                     ->label('Email')
                                     ->email()
-                                    ->required(),
+                                    ->required()
+                                    ->unique(User::class),
                                 TextInput::make('password')
                                     ->label('Senha')
                                     ->password()
-                                    ->required(),
+                                    ->required()
+                                    ->dehydrateStateUsing(fn($state) => Hash::make($state)),
                             ]),
                         Step::make('Função do Usuário')
-
                             ->description('Selecione o papel do usuário')
                             ->icon(Heroicon::PuzzlePiece)
                             ->schema([
-                                Select::make('role')->options([
-                                    'admin' => 'Administrator',
-                                    'coordinator' => 'Coordinator',
-                                    'teacher' => 'Teacher',
-                                ])->required()
-                            ])
+                                Select::make('role')
+                                    ->label('Função')
+                                    ->options([
+                                        'Administrador' => 'Administrador',
+                                        'Coodernador' => 'Coordenador', // mantém o valor do banco (com o typo atual)
+                                        'Professor' => 'Professor',
+                                    ])
+                                    ->required(),
+                            ]),
                     ]),
-                ]),
+                ])
+                ->using(function (array $data): User {
+                    $user = User::create($data);
+
+                    // vincula o usuário à escola atual
+                    $user->schools()->attach(Filament::getTenant()->id);
+
+                    return $user;
+                }),
         ];
     }
 }

@@ -11,10 +11,12 @@ use App\Filament\Resources\Students\Schemas\StudentsInfolist;
 use App\Filament\Resources\Students\Tables\StudentsTable;
 use App\Models\Students;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class StudentsResource extends Resource
@@ -28,11 +30,16 @@ class StudentsResource extends Resource
     protected static ?string $label = 'Lista de estudantes';
     protected static ?string $navigationLabel = 'Estudantes';
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('school_id', Filament::getTenant()->getKey());
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
-
 
     public static function form(Schema $schema): Schema
     {

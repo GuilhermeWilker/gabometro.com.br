@@ -11,10 +11,12 @@ use App\Filament\Resources\Users\Schemas\UserInfolist;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 
@@ -27,6 +29,15 @@ class UserResource extends Resource
     protected static ?string $recordTitleAttribute = 'Users list';
     protected static ?string $label = 'Usuários';
     protected static ?string $navigationLabel = 'Usuários';
+    protected static bool $isScopedToTenant = false;
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->whereHas('schools', function (Builder $query) {
+                $query->where('schools.id', Filament::getTenant()->id);
+            });
+    }
 
     public static function form(Schema $schema): Schema
     {

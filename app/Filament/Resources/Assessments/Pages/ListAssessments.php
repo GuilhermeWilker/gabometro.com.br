@@ -7,6 +7,7 @@ use App\Imports\AssessmentResultsImport;
 use App\Jobs\ImportAssessmentResults;
 use App\Models\ClassRoom;
 use Filament\Actions\CreateAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -24,6 +25,13 @@ use Maatwebsite\Excel\Facades\Excel;
 class ListAssessments extends ListRecords
 {
     protected static string $resource = AssessmentResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['school_id'] = Filament::getTenant()->getKey();
+
+        return $data;
+    }
 
     protected function getHeaderActions(): array
     {

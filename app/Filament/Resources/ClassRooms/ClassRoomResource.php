@@ -12,10 +12,12 @@ use App\Filament\Resources\ClassRooms\Schemas\ClassRoomInfolist;
 use App\Filament\Resources\ClassRooms\Tables\ClassRoomsTable;
 use App\Models\ClassRoom;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class ClassRoomResource extends Resource
@@ -30,6 +32,12 @@ class ClassRoomResource extends Resource
 
     protected static ?string $label = 'Sala de Aula';
     protected static ?string $navigationLabel = 'Salas de Aula';
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('school_id', Filament::getTenant()->getKey());
+    }
 
     public static function getNavigationBadge(): ?string
     {

@@ -9,10 +9,12 @@ use App\Filament\Resources\Assessments\Schemas\AssessmentForm;
 use App\Filament\Resources\Assessments\Tables\AssessmentsTable;
 use App\Models\Assessment;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class AssessmentResource extends Resource
@@ -23,6 +25,12 @@ class AssessmentResource extends Resource
     protected static ?string $recordTitleAttribute = 'Assessment list';
     protected static ?string $label = 'Lista de simulados';
     protected static ?string $navigationLabel = 'Simulados';
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('school_id', Filament::getTenant()->getKey());
+    }
 
     public static function getNavigationBadge(): ?string
     {

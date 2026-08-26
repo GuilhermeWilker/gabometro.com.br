@@ -13,6 +13,12 @@ class Assessment extends Model
     protected $casts = [
         'assessment_date' => 'date',
     ];
+
+    public function school(): BelongsTo
+    {
+        return $this->belongsTo(School::class);
+    }
+
     public function classRoom(): BelongsTo
     {
         return $this->belongsTo(ClassRoom::class);

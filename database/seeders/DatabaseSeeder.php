@@ -28,5 +28,11 @@ class DatabaseSeeder extends Seeder
             'email' => "wilkerguilherme0" . Env::get('MAIL_DOMAIN'),
             'role' => 'Administrador',
         ]);
+
+        User::factory()->create([
+            'name' => 'pedro guliver',
+            'email' => "pg" . Env::get('MAIL_DOMAIN'),
+            'role' => 'Professor',
+        ]);
     }
 }

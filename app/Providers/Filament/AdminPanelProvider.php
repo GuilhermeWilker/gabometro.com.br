@@ -3,6 +3,9 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\LoginPage;
+use App\Filament\Pages\Tenancy\EditSchoolProfile;
+use App\Filament\Pages\Tenancy\RegisterSchool;
+use App\Models\School;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Enums\UserMenuPosition;
 
@@ -38,6 +41,9 @@ class AdminPanelProvider extends PanelProvider
             ->darkModeBrandLogo(asset('assets/gabometro-logo-dark.svg'))
             ->brandLogoHeight('3.7rem')
             ->login(LoginPage::class)
+            ->tenant(School::class, slugAttribute: 'slug')
+            ->tenantRegistration(RegisterSchool::class)
+            ->tenantProfile(EditSchoolProfile::class)
             ->colors([
                 'primary' => Color::Indigo,
             ])

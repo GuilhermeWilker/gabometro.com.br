@@ -10,10 +10,16 @@ class Students extends Model
 {
     protected $guarded = ['id'];
 
+    public function school(): BelongsTo
+    {
+        return $this->belongsTo(School::class);
+    }
+
     public function classRoom(): BelongsTo
     {
         return $this->belongsTo(ClassRoom::class);
     }
+
     public function results(): HasMany
     {
         return $this->hasMany(AssessmentResult::class);

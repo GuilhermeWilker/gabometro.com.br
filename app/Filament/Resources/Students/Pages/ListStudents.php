@@ -15,12 +15,20 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Actions\Action;
+use Filament\Facades\Filament;
 use Filament\Schemas\Components\Utilities\Get as UtilitiesGet;
 use Filament\Schemas\Components\Utilities\Set as UtilitiesSet;
 
 class ListStudents extends ListRecords
 {
     protected static string $resource = StudentsResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['school_id'] = Filament::getTenant()->getKey();
+
+        return $data;
+    }
 
     protected function getHeaderActions(): array
     {

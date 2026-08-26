@@ -19,11 +19,21 @@ class ResultadoGeralImport implements ToArray
 
         [$registrationIdx, $nameIdx, $subjectColumns, $correctIdx, $incorrectIdx] = $this->mapColumns($header);
 
-        DB::transaction(function () use ($array, $registrationIdx, $nameIdx, $subjectColumns, $correctIdx, $incorrectIdx) {
+        $schoolId = $this->assessment->school_id;
+
+        DB::transaction(function () use ($array, $registrationIdx, $nameIdx, $subjectColumns, $correctIdx, $incorrectIdx, $schoolId) {
             // resolve/cria os Subjects UMA vez, fora do loop de linhas (evita N+1)
             $subjectsByColumn = collect($subjectColumns)
                 ->mapWithKeys(fn(int $colIndex, string $abbreviation) => [
-                    $colIndex => Subject::firstOrCreate(['abbreviation' => trim($abbreviation)]),
+                    $colIndex => Subject::firstOrCreate(
+                        [
+                            'abbreviation' => trim($abbreviation),
+                            'school_id' => $schoolId,
+                        ],
+                        [
+                            // se precisar de mais campos default, coloque aqui
+                        ]
+                    ),
                 ]);
 
             foreach ($array as $row) {
@@ -32,7 +42,10 @@ class ResultadoGeralImport implements ToArray
                 }
 
                 $student = Students::firstOrCreate(
-                    ['registration_number' => (string) $row[$registrationIdx]],
+                    [
+                        'registration_number' => (string) $row[$registrationIdx],
+                        'school_id' => $schoolId,
+                    ],
                     [
                         'name' => $row[$nameIdx],
                         'class_room_id' => $this->assessment->class_room_id,

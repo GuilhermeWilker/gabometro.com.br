@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ClassRooms\Pages;
 
 use App\Filament\Resources\ClassRooms\ClassRoomResource;
 use Filament\Actions\CreateAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\ListRecords;
@@ -14,7 +15,12 @@ use Filament\Support\Icons\Heroicon;
 class ListClassRooms extends ListRecords
 {
     protected static string $resource = ClassRoomResource::class;
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['school_id'] = Filament::getTenant()->getKey();
 
+        return $data;
+    }
     protected function getHeaderActions(): array
     {
         return [
