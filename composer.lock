@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "364f230446f699ac59c833476200a7ea",
+    "content-hash": "ed6143cea472f9989ee0107509010f58",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -70,6 +70,111 @@
                 "source": "https://github.com/AnourValar/eloquent-serialize/tree/1.3.11"
             },
             "time": "2026-08-07T06:14:19+00:00"
+        },
+        {
+            "name": "archtechx/helpers",
+            "version": "v0.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/archtechx/helpers.git",
+                "reference": "6eb147086c58aa3f51ccc87754345f5925a75adf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/archtechx/helpers/zipball/6eb147086c58aa3f51ccc87754345f5925a75adf",
+                "reference": "6eb147086c58aa3f51ccc87754345f5925a75adf",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.1|^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Samuel Štancl",
+                    "email": "samuel@archte.ch"
+                }
+            ],
+            "description": "A collection of helpers we commonly use.",
+            "support": {
+                "source": "https://github.com/archtechx/helpers/tree/v0.3.4"
+            },
+            "time": "2026-03-31T01:12:48+00:00"
+        },
+        {
+            "name": "archtechx/money",
+            "version": "v0.5.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/archtechx/money.git",
+                "reference": "ce7b5595ba53a2a4222e174ba7960fda95c40ba3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/archtechx/money/zipball/ce7b5595ba53a2a4222e174ba7960fda95c40ba3",
+                "reference": "ce7b5595ba53a2a4222e174ba7960fda95c40ba3",
+                "shasum": ""
+            },
+            "require": {
+                "archtechx/helpers": "^0.3.2",
+                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "larastan/larastan": "^2.4|^3.0",
+                "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.7|^4.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.1|^4.0",
+                "phpstan/phpstan": "^1.9.8|^2.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ArchTech\\Money\\MoneyServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php",
+                    "src/Wireable.php"
+                ],
+                "psr-4": {
+                    "ArchTech\\Money\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Samuel Štancl",
+                    "email": "samuel@archte.ch"
+                }
+            ],
+            "description": "A lightweight package for handling money math in PHP.",
+            "support": {
+                "issues": "https://github.com/archtechx/money/issues",
+                "source": "https://github.com/archtechx/money/tree/v0.5.4"
+            },
+            "time": "2026-03-31T01:21:02+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -2733,6 +2838,57 @@
             "time": "2026-03-17T14:54:13+00:00"
         },
         {
+            "name": "laravellegends/pt-br-validator",
+            "version": "13.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LaravelLegends/pt-br-validator.git",
+                "reference": "5247b895eeb6d86194226b3286c6b9cbad0719d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LaravelLegends/pt-br-validator/zipball/5247b895eeb6d86194226b3286c6b9cbad0719d7",
+                "reference": "5247b895eeb6d86194226b3286c6b9cbad0719d7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0 || ^12.0 || ^13.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^10.0 || ^11.0",
+                "phpunit/phpunit": "^8.3 || ^9.0 || ^11.5.3 || ^12.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelLegends\\PtBrValidator\\ValidatorProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelLegends\\PtBrValidator\\": "src/pt-br-validator"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Wallace de Souza Vizerra",
+                    "email": "wallacemaxters@gmail.com"
+                }
+            ],
+            "description": "Uma biblioteca contendo validações de formatos Brasileiros, para o Laravel",
+            "support": {
+                "issues": "https://github.com/LaravelLegends/pt-br-validator/issues",
+                "source": "https://github.com/LaravelLegends/pt-br-validator/tree/13.0.0"
+            },
+            "time": "2026-05-12T00:00:21+00:00"
+        },
+        {
             "name": "league/commonmark",
             "version": "2.10.0",
             "source": {
@@ -3467,6 +3623,81 @@
             "time": "2026-03-08T20:05:35+00:00"
         },
         {
+            "name": "leandrocfe/filament-ptbr-form-fields",
+            "version": "5.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/leandrocfe/filament-ptbr-form-fields.git",
+                "reference": "c2ed248864509badc5fccb46b7362e3a23eb4a0f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/leandrocfe/filament-ptbr-form-fields/zipball/c2ed248864509badc5fccb46b7362e3a23eb4a0f",
+                "reference": "c2ed248864509badc5fccb46b7362e3a23eb4a0f",
+                "shasum": ""
+            },
+            "require": {
+                "archtechx/money": "^0.5.1",
+                "filament/filament": "^5.0",
+                "laravellegends/pt-br-validator": "^10.0 || ^11.0 || ^12.0 || ^13.0",
+                "moneyphp/money": "^4.5",
+                "php": "^8.2 || ^8.3",
+                "spatie/laravel-package-tools": "^1.14.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.5",
+                "laravel/pint": "^1.27",
+                "nunomaduro/collision": "^8.8",
+                "orchestra/testbench": "^10.4",
+                "pestphp/pest": "^3.8",
+                "pestphp/pest-plugin-arch": "^3.1",
+                "pestphp/pest-plugin-laravel": "^3.2",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "FilamentPtbrFormFields": "Leandrocfe\\FilamentPtbrFormFields\\Facades\\FilamentPtbrFormFields"
+                    },
+                    "providers": [
+                        "Leandrocfe\\FilamentPtbrFormFields\\FilamentPtbrFormFieldsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Leandrocfe\\FilamentPtbrFormFields\\": "src/",
+                    "Leandrocfe\\FilamentPtbrFormFields\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Leandro Costa Ferreira",
+                    "email": "leandrocfe@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Brazilian pt-BR form fields.",
+            "homepage": "https://github.com/leandrocfe/filament-ptbr-form-fields",
+            "keywords": [
+                "filament-ptbr-form-fields",
+                "laravel",
+                "leandrocfe"
+            ],
+            "support": {
+                "issues": "https://github.com/leandrocfe/filament-ptbr-form-fields/issues",
+                "source": "https://github.com/leandrocfe/filament-ptbr-form-fields/tree/5.0.1"
+            },
+            "time": "2026-04-20T22:00:21+00:00"
+        },
+        {
             "name": "livewire/livewire",
             "version": "v4.4.0",
             "source": {
@@ -3815,6 +4046,96 @@
                 "source": "https://github.com/MarkBaker/PHPMatrix/tree/3.0.1"
             },
             "time": "2022-12-02T22:17:43+00:00"
+        },
+        {
+            "name": "moneyphp/money",
+            "version": "v4.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moneyphp/money.git",
+                "reference": "d49ee625c6ba79b9d7a228ce153b02fc1032152b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moneyphp/money/zipball/d49ee625c6ba79b9d7a228ce153b02fc1032152b",
+                "reference": "d49ee625c6ba79b9d7a228ce153b02fc1032152b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "ext-filter": "*",
+                "ext-json": "*",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
+            },
+            "require-dev": {
+                "cache/taggable-cache": "^1.1.0",
+                "doctrine/coding-standard": "^12.0",
+                "doctrine/instantiator": "^1.5.0 || ^2.0",
+                "ext-gmp": "*",
+                "ext-intl": "*",
+                "florianv/exchanger": "^2.8.1",
+                "florianv/swap": "^4.3.0",
+                "moneyphp/crypto-currencies": "^1.1.0",
+                "moneyphp/iso-currencies": "^3.4",
+                "php-http/message": "^1.16.0",
+                "php-http/mock-client": "^1.6.0",
+                "phpbench/phpbench": "^1.2.5",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.1.9",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpunit/phpunit": "^10.5.9",
+                "psr/cache": "^1.0.1 || ^2.0 || ^3.0",
+                "ticketswap/phpstan-error-formatter": "^1.1"
+            },
+            "suggest": {
+                "ext-gmp": "Calculate without integer limits",
+                "ext-intl": "Format Money objects with intl",
+                "florianv/exchanger": "Exchange rates library for PHP",
+                "florianv/swap": "Exchange rates library for PHP",
+                "psr/cache-implementation": "Used for Currency caching"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Money\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathias Verraes",
+                    "email": "mathias@verraes.net",
+                    "homepage": "http://verraes.net"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com"
+                },
+                {
+                    "name": "Frederik Bosch",
+                    "email": "f.bosch@genkgo.nl"
+                }
+            ],
+            "description": "PHP implementation of Fowler's Money pattern",
+            "homepage": "http://moneyphp.org",
+            "keywords": [
+                "Value Object",
+                "money",
+                "vo"
+            ],
+            "support": {
+                "issues": "https://github.com/moneyphp/money/issues",
+                "source": "https://github.com/moneyphp/money/tree/v4.9.0"
+            },
+            "time": "2026-05-04T20:23:15+00:00"
         },
         {
             "name": "monolog/monolog",
