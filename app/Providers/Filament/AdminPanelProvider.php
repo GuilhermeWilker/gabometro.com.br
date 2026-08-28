@@ -5,6 +5,9 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\LoginPage;
 use App\Filament\Pages\Tenancy\EditSchoolProfile;
 use App\Filament\Pages\Tenancy\RegisterSchool;
+use App\Filament\Widgets\LatestAssessments;
+use App\Filament\Widgets\SchoolStatsOverview;
+use App\Filament\Widgets\SubjectPerformanceChart;
 use App\Models\School;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Enums\UserMenuPosition;
@@ -57,8 +60,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+                SchoolStatsOverview::class,
+                LatestAssessments::class,
+                SubjectPerformanceChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
