@@ -51,7 +51,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Indigo,
             ])
             // ->topNavigation()
-            ->darkMode(false)
+            ->darkMode()
             ->databaseNotifications()
             ->spa()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')

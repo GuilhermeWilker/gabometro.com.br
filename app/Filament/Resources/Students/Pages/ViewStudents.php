@@ -6,6 +6,7 @@ use App\Filament\Resources\Students\StudentsResource;
 use App\Filament\Resources\Students\Widgets\StudentAssessmentOverview;
 use App\Filament\Resources\Students\Widgets\StudentEvolutionChart;
 use App\Filament\Resources\Students\Widgets\StudentSubjectPerformance;
+use App\Filament\Widgets\StudentPdfsTable;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -37,6 +38,10 @@ class ViewStudents extends ViewRecord
             ]),
 
             StudentEvolutionChart::make([
+                'record' => $this->record,
+            ]),
+
+            StudentPdfsTable::make([
                 'record' => $this->record,
             ]),
         ];
