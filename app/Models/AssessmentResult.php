@@ -18,7 +18,7 @@ class AssessmentResult extends Model
 
     public function student(): BelongsTo
     {
-        return $this->belongsTo(Students::class);
+        return $this->belongsTo(Students::class, 'students_id');
     }
 
     public function subjects(): BelongsToMany

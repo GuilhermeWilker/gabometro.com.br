@@ -14,6 +14,8 @@ class School extends Model
     {
         return [
             'is_active' => 'boolean',
+            'mail_is_configured' => 'boolean',
+            'mail_password' => 'encrypted',
         ];
     }
 

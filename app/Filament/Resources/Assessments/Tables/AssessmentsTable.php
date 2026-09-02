@@ -2,10 +2,15 @@
 
 namespace App\Filament\Resources\Assessments\Tables;
 
+use App\Jobs\GenerateAssessmentResultPdf;
+use App\Jobs\SendAssessmentEmails;
+use App\Jobs\SendAssessmentResultEmail;
+use App\Models\Assessment;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -32,16 +37,24 @@ class AssessmentsTable
                     ->isoDate()
                     ->sortable(),
                 TextColumn::make('status')
-                    ->label('Status')
-                    ->size('7rem')
                     ->badge()
+                    ->formatStateUsing(fn(string $state) => match ($state) {
+                        'pending' => 'Pendente',
+                        'processing' => 'Processando',
+                        'processed' => 'Processado',
+                        'sending' => 'Enviando e-mails',
+                        'sent' => 'E-mails enviados',
+                        'error' => 'Erro',
+                        default => $state,
+                    })
                     ->color(fn(string $state) => match ($state) {
-                        'processed' => 'success',
-                        'processing' => 'warning',
+                        'pending' => 'gray',
+                        'processing', 'sending' => 'warning',
+                        'processed' => 'info',
+                        'sent' => 'success',
                         'error' => 'danger',
                         default => 'gray',
-                    })
-                    ->searchable(),
+                    }),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -65,8 +78,37 @@ class AssessmentsTable
                         Str::slug($record->name) . '.xlsx'
                     )),
 
+                Action::make('generatePdfs')
+                    ->label('Gerar PDFs')
+                    ->icon('heroicon-o-document')
+                    ->action(function (Assessment $record) {
+                        $record->results()->each(function ($result) {
+                            GenerateAssessmentResultPdf::dispatch($result->id);
+                        });
+                    }),
+
+                Action::make('sendEmails')
+                    ->label('Enviar e-mails')
+                    ->icon('heroicon-o-envelope')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading('Enviar resultados por e-mail?')
+                    ->modalDescription('Os e-mails serão enviados em segundo plano. Você receberá notificações de progresso.')
+                    ->action(function (Assessment $record) {
+                        $record->update(['status' => 'sending']);
+
+                        SendAssessmentEmails::dispatch($record->id, auth()->id());
+
+                        Notification::make()
+                            ->title('Envio iniciado')
+                            ->body('Acompanhe o progresso no sino de notificações.')
+                            ->success()
+                            ->send();
+                    }),
+
+
                 // EditAction::make(),
-                DeleteAction::make()
+                // DeleteAction::make()->button()
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email')->nullable();
             $table->string('registration_number')->unique();
             $table->foreignIdFor(ClassRoom::class)->constrained()->cascadeOnDelete();
             $table->timestamps();

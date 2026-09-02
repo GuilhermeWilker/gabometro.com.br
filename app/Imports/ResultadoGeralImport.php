@@ -15,42 +15,63 @@ class ResultadoGeralImport implements ToArray
 
     public function array(array $array): void
     {
-        $header = array_shift($array); // primeira linha = cabeçalho
+        $header = array_shift($array);
 
-        [$registrationIdx, $nameIdx, $subjectColumns, $correctIdx, $incorrectIdx] = $this->mapColumns($header);
+        [$registrationIdx, $nameIdx, $emailIdx, $subjectColumns, $correctIdx, $incorrectIdx] = $this->mapColumns($header);
 
         $schoolId = $this->assessment->school_id;
 
-        DB::transaction(function () use ($array, $registrationIdx, $nameIdx, $subjectColumns, $correctIdx, $incorrectIdx, $schoolId) {
-            // resolve/cria os Subjects UMA vez, fora do loop de linhas (evita N+1)
+        DB::transaction(function () use (
+            $array,
+            $registrationIdx,
+            $nameIdx,
+            $emailIdx,
+            $subjectColumns,
+            $correctIdx,
+            $incorrectIdx,
+            $schoolId
+        ) {
             $subjectsByColumn = collect($subjectColumns)
                 ->mapWithKeys(fn(int $colIndex, string $abbreviation) => [
                     $colIndex => Subject::firstOrCreate(
                         [
                             'abbreviation' => trim($abbreviation),
                             'school_id' => $schoolId,
-                        ],
-                        [
-                            // se precisar de mais campos default, coloque aqui
                         ]
                     ),
                 ]);
 
             foreach ($array as $row) {
                 if (blank($row[$registrationIdx] ?? null)) {
-                    continue; // pula linhas em branco no fim da planilha
+                    continue;
                 }
 
-                $student = Students::firstOrCreate(
+                $emailRaw = ($emailIdx !== false) ? ($row[$emailIdx] ?? null) : null;
+                $email = $this->normalizeEmail($emailRaw);
+
+                logger()->info('ResultadoGeralImport student row', [
+                    'matricula' => $row[$registrationIdx] ?? null,
+                    'email_raw' => $emailRaw,
+                    'email_normalized' => $email,
+                    'emailIdx' => $emailIdx,
+                ]);
+
+                $student = Students::updateOrCreate(
                     [
                         'registration_number' => (string) $row[$registrationIdx],
                         'school_id' => $schoolId,
                     ],
                     [
-                        'name' => $row[$nameIdx],
+                        'name' => trim((string) ($row[$nameIdx] ?? '')),
                         'class_room_id' => $this->assessment->class_room_id,
+                        'email' => $email,
                     ]
                 );
+
+                // se o aluno já existia e a planilha trouxe e-mail novo, garante update
+                if ($email && $student->email !== $email) {
+                    $student->update(['email' => $email]);
+                }
 
                 $correct = (int) ($row[$correctIdx] ?? 0);
                 $incorrect = (int) ($row[$incorrectIdx] ?? 0);
@@ -80,25 +101,73 @@ class ResultadoGeralImport implements ToArray
     }
 
     /**
-     * @return array{0: int, 1: int, 2: array<string, int>, 3: int, 4: int}
+     * @return array{0: int|false, 1: int|false, 2: int|false, 3: array<string, int>, 4: int|false, 5: int|false}
      */
     private function mapColumns(array $header): array
     {
-        $registrationIdx = array_search('Matricula', $header, true);
-        $nameIdx = array_search('Nome aluno(a)', $header, true);
-        $correctIdx = array_search('Acertos', $header, true);
-        $incorrectIdx = array_search('Erros', $header, true);
+        // normaliza cabeçalhos: trim + lowercase
+        $normalized = collect($header)
+            ->map(fn($label) => mb_strtolower(trim((string) $label)))
+            ->all();
 
-        $fixedIndexes = [$registrationIdx, $nameIdx, $correctIdx, $incorrectIdx];
+        $find = function (array $candidates) use ($normalized) {
+            foreach ($candidates as $candidate) {
+                $idx = array_search(mb_strtolower($candidate), $normalized, true);
+                if ($idx !== false) {
+                    return $idx;
+                }
+            }
+
+            return false;
+        };
+
+        $registrationIdx = $find(['Matricula', 'Matrícula', 'matricula']);
+        $nameIdx = $find(['Nome aluno(a)', 'Nome_aluno', 'Nome aluno', 'Nome']);
+        $emailIdx = $find(['E-mail', 'Email', 'e-mail', 'email']);
+        $correctIdx = $find(['Acertos', 'acertos']);
+        $incorrectIdx = $find(['Erros', 'erros']);
+
+        $fixedIndexes = array_filter(
+            [$registrationIdx, $nameIdx, $emailIdx, $correctIdx, $incorrectIdx],
+            fn($idx) => $idx !== false
+        );
 
         $subjectColumns = [];
         foreach ($header as $idx => $label) {
             if (in_array($idx, $fixedIndexes, true)) {
                 continue;
             }
-            $subjectColumns[$label] = $idx;
+            if (blank(trim((string) $label))) {
+                continue;
+            }
+            $subjectColumns[trim((string) $label)] = $idx;
         }
 
-        return [$registrationIdx, $nameIdx, $subjectColumns, $correctIdx, $incorrectIdx];
+        // DEBUG temporário — olhe no log
+        logger()->info('ResultadoGeralImport headers', [
+            'raw_header' => $header,
+            'registrationIdx' => $registrationIdx,
+            'nameIdx' => $nameIdx,
+            'emailIdx' => $emailIdx,
+            'correctIdx' => $correctIdx,
+            'incorrectIdx' => $incorrectIdx,
+        ]);
+
+        return [$registrationIdx, $nameIdx, $emailIdx, $subjectColumns, $correctIdx, $incorrectIdx];
+    }
+
+    private function normalizeEmail(mixed $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $email = strtolower(trim((string) $value));
+
+        if ($email === '' || $email === '-') {
+            return null;
+        }
+
+        return filter_var($email, FILTER_VALIDATE_EMAIL) ?: null;
     }
 }

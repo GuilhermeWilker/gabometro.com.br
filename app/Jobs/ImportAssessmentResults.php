@@ -33,5 +33,7 @@ class ImportAssessmentResults implements ShouldQueue
             $assessment->spreadsheet_path,
             'local'
         );
+
+        $assessment->update(['status' => 'processed']);
     }
 }

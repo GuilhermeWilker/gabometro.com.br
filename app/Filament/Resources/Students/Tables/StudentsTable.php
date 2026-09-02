@@ -31,8 +31,8 @@ class StudentsTable
                     ->label('E-mail institucional')
                     ->state(
                         fn($record) =>
-                        $record->registration_number
-                            ? $record->registration_number . '@aluno.edu.br'
+                        $record->email
+                            ? $record->email
                             : 'N/A'
                     )->copyable()
                     ->badge()
