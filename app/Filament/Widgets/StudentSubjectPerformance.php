@@ -3,66 +3,89 @@
 namespace App\Filament\Resources\Students\Widgets;
 
 use App\Models\Students;
-use Filament\Widgets\ChartWidget;
+use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
-class StudentSubjectPerformance extends ChartWidget
+class StudentSubjectPerformance extends ApexChartWidget
 {
     public ?Students $record = null;
 
-    protected ?string $heading = 'Desempenho por matéria';
+    protected static ?string $chartId = 'studentSubjectPerformance';
 
-    protected ?string $maxHeight = '280px';
+    protected static ?string $heading = 'Desempenho por matéria';
 
+    protected static ?int $contentHeight = 280;
     protected ?string $pollingInterval = null;
 
-    protected function getType(): string
-    {
-        return 'bar';
-    }
+    protected int | string | array $columnSpan = 1;
 
-    protected function getData(): array
+    protected function getOptions(): array
     {
         $student = $this->record;
 
         if (! $student) {
-            return [
-                'datasets' => [],
-                'labels' => [],
-            ];
+            return $this->empty();
         }
 
         $latest = $student->results()
-            ->with('assessment', 'subjects')
+            ->with(['assessment', 'subjects'])
             ->get()
-            ->sortByDesc(
-                fn($result) => $result->assessment->assessment_date
-            )
+            ->sortByDesc(fn($r) => $r->assessment->assessment_date)
             ->first();
 
         if (! $latest) {
-            return [
-                'datasets' => [],
-                'labels' => [],
-            ];
+            return $this->empty();
         }
 
         $subjects = $latest->subjects;
+        $categories = $subjects->pluck('abbreviation')->values()->toArray();
+        $data = $subjects->map(fn($s) => (int) $s->pivot->correct_answers)->values()->toArray();
 
         return [
-            'datasets' => [
+            'chart' => [
+                'type' => 'bar',
+                'height' => 280,
+                'fontFamily' => 'inherit',
+                'toolbar' => ['show' => false],
+            ],
+            'series' => [
                 [
-                    'label' => 'Aproveitamento',
-                    'data' => $subjects
-                        ->map(fn($subject) => (int) $subject->pivot->correct_answers)
-                        ->values()
-                        ->toArray(),
+                    'name' => 'Acertos',
+                    'data' => $data,
                 ],
             ],
+            'xaxis' => [
+                'categories' => $categories,
+                'labels' => [
+                    'style' => ['fontFamily' => 'inherit', 'fontWeight' => 600],
+                ],
+            ],
+            'yaxis' => [
+                'labels' => [
+                    'style' => ['fontFamily' => 'inherit'],
+                ],
+            ],
+            'colors' => ['#263ff3'],
+            'plotOptions' => [
+                'bar' => [
+                    'borderRadius' => 6,
+                    'columnWidth' => '55%',
+                    'distributed' => true, // cor por barra (opcional)
+                ],
+            ],
+            'dataLabels' => ['enabled' => false],
+            'grid' => [
+                'strokeDashArray' => 4,
+            ],
+            'legend' => ['show' => false],
+        ];
+    }
 
-            'labels' => $subjects
-                ->pluck('abbreviation')
-                ->values()
-                ->toArray(),
+    private function empty(): array
+    {
+        return [
+            'chart' => ['type' => 'bar', 'height' => 280],
+            'series' => [['name' => 'Acertos', 'data' => []]],
+            'xaxis' => ['categories' => []],
         ];
     }
 }

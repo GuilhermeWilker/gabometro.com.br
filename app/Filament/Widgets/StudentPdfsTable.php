@@ -74,7 +74,7 @@ class StudentPdfsTable extends TableWidget
                 Action::make('downloadPdf')
                     ->label('Baixar')
                     ->icon('heroicon-o-arrow-down-tray')
-                    ->color('success')
+                    ->color('info')
                     ->visible(fn($record) => filled($record->pdf_path)
                         && Storage::disk('local')->exists($record->pdf_path))
                     ->action(function ($record) {

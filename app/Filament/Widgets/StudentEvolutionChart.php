@@ -3,72 +3,101 @@
 namespace App\Filament\Resources\Students\Widgets;
 
 use App\Models\Students;
-use Filament\Widgets\ChartWidget;
+use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
-class StudentEvolutionChart extends ChartWidget
+class StudentEvolutionChart extends ApexChartWidget
 {
     public ?Students $record = null;
 
-    protected ?string $heading = 'Evolução do aluno';
+    protected static ?string $chartId = 'studentEvolutionChart';
 
-    protected ?string $maxHeight = '300px';
+    protected static ?string $heading = 'Evolução do aluno';
+
+    protected static ?int $contentHeight = 280;
 
     protected ?string $pollingInterval = null;
 
-    protected function getType(): string
-    {
-        return 'line';
-    }
+    protected int | string | array $columnSpan = 1;
 
-    protected function getData(): array
+    protected function getOptions(): array
     {
         $student = $this->record;
 
         if (! $student) {
-            return [
-                'datasets' => [],
-                'labels' => [],
-            ];
+            return $this->empty();
         }
 
         $results = $student->results()
             ->with('assessment')
             ->get()
-            ->sortBy(
-                fn($result) => $result->assessment->assessment_date
-            );
+            ->sortBy(fn($r) => $r->assessment->assessment_date);
+
+        $labels = $results->map(fn($r) => $r->assessment->name)->values()->toArray();
+
+        $data = $results->map(function ($result) {
+            if ($result->total_questions === 0) {
+                return 0;
+            }
+
+            return round(($result->correct_answers / $result->total_questions) * 100, 1);
+        })->values()->toArray();
 
         return [
-            'datasets' => [
+            'chart' => [
+                'type' => 'area',
+                'height' => 280,
+                'fontFamily' => 'inherit',
+                'toolbar' => ['show' => false],
+                'zoom' => ['enabled' => false],
+            ],
+            'series' => [
                 [
-                    'label' => 'Aproveitamento (%)',
-
-                    'data' => $results
-                        ->map(function ($result) {
-                            if ($result->total_questions === 0) {
-                                return 0;
-                            }
-
-                            return round(
-                                (
-                                    $result->correct_answers
-                                    / $result->total_questions
-                                ) * 100,
-                                2
-                            );
-                        })
-                        ->values()
-                        ->toArray(),
+                    'name' => 'Aproveitamento (%)',
+                    'data' => $data,
                 ],
             ],
+            'xaxis' => [
+                'categories' => $labels,
+                'labels' => [
+                    'style' => ['fontFamily' => 'inherit', 'fontWeight' => 600],
+                ],
+            ],
+            'yaxis' => [
+                'min' => 0,
+                'max' => 100,
+                'labels' => [
+                    'style' => ['fontFamily' => 'inherit'],
+                ],
+            ],
+            'colors' => ['#263ff3'],
+            'stroke' => [
+                'curve' => 'smooth',
+                'width' => 3,
+            ],
+            'fill' => [
+                'type' => 'gradient',
+                'gradient' => [
+                    'shadeIntensity' => 1,
+                    'opacityFrom' => 0.45,
+                    'opacityTo' => 0.05,
+                ],
+            ],
+            'markers' => [
+                'size' => 4,
+            ],
+            'dataLabels' => ['enabled' => false],
+            'grid' => [
+                'strokeDashArray' => 4,
+            ],
+        ];
+    }
 
-            'labels' => $results
-                ->map(
-                    fn($result) =>
-                    $result->assessment->name
-                )
-                ->values()
-                ->toArray(),
+    private function empty(): array
+    {
+        return [
+            'chart' => ['type' => 'area', 'height' => 280],
+            'series' => [['name' => 'Aproveitamento (%)', 'data' => []]],
+            'xaxis' => ['categories' => []],
         ];
     }
 }

@@ -30,6 +30,8 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Leandrocfe\FilamentApexCharts\FilamentApexCharts;
+use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -49,6 +51,11 @@ class AdminPanelProvider extends PanelProvider
             ->tenantProfile(EditSchoolProfile::class)
             ->colors([
                 'primary' => Color::Indigo,
+                'success' => Color::Emerald,
+                'warning' => Color::Amber,
+                'danger'  => Color::Rose,
+                'info'    => Color::Blue,
+                'gray'    => Color::Slate,
             ])
             // ->topNavigation()
             ->darkMode()
@@ -56,9 +63,8 @@ class AdminPanelProvider extends PanelProvider
             ->spa()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
+            ->pages([])
+            ->breadcrumbs(false)
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 SchoolStatsOverview::class,
@@ -86,7 +92,9 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 AuthUIEnhancerPlugin::make()
                     ->formPanelPosition('left')
-                    ->formPanelWidth('35%')
+                    ->formPanelWidth('35%'),
+
+                FilamentApexChartsPlugin::make()
             ]);
     }
 }

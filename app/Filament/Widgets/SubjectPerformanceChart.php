@@ -4,28 +4,32 @@ namespace App\Filament\Widgets;
 
 use App\Models\Subject;
 use Filament\Facades\Filament;
-use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
+use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
-class SubjectPerformanceChart extends ChartWidget
+class SubjectPerformanceChart extends ApexChartWidget
 {
-    protected ?string $heading = 'Desempenho por disciplina';
+    protected static ?string $chartId = 'subjectPerformanceChart';
+
+    protected static ?string $heading = 'Desempenho por disciplina';
+
     protected static ?int $sort = 3;
+
+    protected static ?int $contentHeight = 320;
 
     protected int | string | array $columnSpan = [
         'md' => 2,
         'xl' => 1,
     ];
 
-    protected function getData(): array
+    protected ?string $pollingInterval = null;
+
+    protected function getOptions(): array
     {
         $schoolId = Filament::getTenant()?->id;
 
         if (! $schoolId) {
-            return [
-                'datasets' => [],
-                'labels' => [],
-            ];
+            return $this->emptyOptions();
         }
 
         $data = Subject::query()
@@ -46,41 +50,75 @@ class SubjectPerformanceChart extends ChartWidget
             ->orderBy('subjects.abbreviation')
             ->get();
 
-        $palette = [
-            '#6366f1', // indigo
-            '#22c55e', // green
-            '#f59e0b', // amber
-            '#ef4444', // red
-            '#06b6d4', // cyan
-            '#a855f7', // purple
-            '#ec4899', // pink
-            '#84cc16', // lime
-            '#f97316', // orange
-            '#14b8a6', // teal
-        ];
-
-        $colors = $data->keys()->map(
-            fn($index) => $palette[$index % count($palette)]
+        $labels = $data->map(
+            fn($s) => $s->name ? "{$s->abbreviation}" : $s->abbreviation
         )->toArray();
 
+        $series = $data->pluck('avg_correct')->map(fn($v) => (float) ($v ?? 0))->toArray();
+
+        // Nord-friendly
+        $colors = [
+            '#263ff3', // primary (base)
+            '#4c63f5', // primary light
+            '#1a2fd1', // primary dark
+            '#6b7ef7', // soft
+            '#0ea5e9', // sky (complemento frio)
+            '#06b6d4', // cyan
+            '#6366f1', // indigo vizinho
+            '#8b5cf6', // violet
+            '#22c55e', // success
+            '#f59e0b', // warning
+            '#ef4444', // danger
+            '#64748b', // muted
+        ];
+
         return [
-            'datasets' => [
-                [
-                    'label' => 'Média de acertos',
-                    'data' => $data->pluck('avg_correct')->map(fn($v) => $v ?? 0)->toArray(),
-                    'backgroundColor' => $colors,
-                    'borderColor' => $colors,
-                    'borderWidth' => 1,
+            'chart' => [
+                'type' => 'donut',
+                'height' => 320,
+                'fontFamily' => 'inherit',
+                'toolbar' => ['show' => false],
+            ],
+            'series' => $series,
+            'labels' => $labels,
+            'colors' => $colors,
+            'legend' => [
+                'position' => 'bottom',
+                'fontFamily' => 'inherit',
+            ],
+            'dataLabels' => [
+                'enabled' => true,
+            ],
+            'stroke' => [
+                'width' => 0,
+            ],
+            'plotOptions' => [
+                'pie' => [
+                    'donut' => [
+                        'size' => '65%',
+                        'labels' => [
+                            'show' => true,
+                            'total' => [
+                                'show' => true,
+                                'label' => 'Média',
+                                'formatter' => null, // ver extraJs se quiser
+                            ],
+                        ],
+                    ],
                 ],
             ],
-            'labels' => $data->map(
-                fn($s) => $s->name ? "{$s->abbreviation} ({$s->name})" : $s->abbreviation
-            )->toArray(),
+            'theme' => [
+                'mode' => 'light', // o plugin respeita dark mode do Filament
+            ],
         ];
     }
 
-    protected function getType(): string
+    private function emptyOptions(): array
     {
-        return 'doughnut';
+        return [
+            'chart' => ['type' => 'donut', 'height' => 320],
+            'series' => [],
+            'labels' => [],
+        ];
     }
 }
