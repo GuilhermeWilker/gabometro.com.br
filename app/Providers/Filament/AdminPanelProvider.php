@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\RegisterPage;
 use App\Filament\Pages\LoginPage;
 use App\Filament\Pages\Tenancy\EditSchoolProfile;
 use App\Filament\Pages\Tenancy\RegisterSchool;
@@ -11,7 +12,6 @@ use App\Filament\Widgets\SubjectPerformanceChart;
 use App\Models\School;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Enums\UserMenuPosition;
-
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -46,6 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->darkModeBrandLogo(asset('assets/gabometro-logo-dark.svg'))
             ->brandLogoHeight('3.7rem')
             ->login(LoginPage::class)
+            ->registration(RegisterPage::class)
             ->tenantMenu(fn() => auth()->user()?->isAdmin())
             ->tenant(School::class, slugAttribute: 'slug')
             ->tenantRegistration(RegisterSchool::class)

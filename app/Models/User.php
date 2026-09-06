@@ -38,7 +38,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return str_ends_with($this->email, Env::get('MAIL_DOMAIN'));
+        return $this->isAdmin() || $this->isCoordinator() || $this->isTeacher();
     }
 
     public function isAdmin(): bool

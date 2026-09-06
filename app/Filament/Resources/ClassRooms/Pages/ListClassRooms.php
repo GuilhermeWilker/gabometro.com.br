@@ -43,6 +43,7 @@ class ListClassRooms extends ListRecords
                                         '7º Ano' => '7º Ano',
                                         '8º Ano' => '8º Ano',
                                         '9º Ano' => '9º Ano',
+                                        'Outro' => 'Outro',
                                     ])
                                     ->required(),
 
