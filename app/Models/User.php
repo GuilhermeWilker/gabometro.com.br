@@ -41,6 +41,31 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return str_ends_with($this->email, Env::get('MAIL_DOMAIN'));
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role === 'Administrador';
+    }
+
+    public function isCoordinator(): bool
+    {
+        return $this->role === 'Coodernador' || $this->role === 'Diretor';
+    }
+
+    public function isTeacher(): bool
+    {
+        return $this->role === 'Professor';
+    }
+
+    public function canManage(): bool
+    {
+        return $this->isAdmin() || $this->isCoordinator();
+    }
+
+    public function canManageOrganization(): bool
+    {
+        return $this->isAdmin();
+    }
+
     protected function casts(): array
     {
         return [

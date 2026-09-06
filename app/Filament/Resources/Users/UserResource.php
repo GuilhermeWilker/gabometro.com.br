@@ -70,4 +70,16 @@ class UserResource extends Resource
             // 'edit' => EditUser::route('/{record}/edit'),
         ];
     }
+    // UserResource.php
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canManageOrganization() ?? false;
+    }
+
+    // ou, se preferir granular:
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
 }

@@ -46,6 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->darkModeBrandLogo(asset('assets/gabometro-logo-dark.svg'))
             ->brandLogoHeight('3.7rem')
             ->login(LoginPage::class)
+            ->tenantMenu(fn() => auth()->user()?->isAdmin())
             ->tenant(School::class, slugAttribute: 'slug')
             ->tenantRegistration(RegisterSchool::class)
             ->tenantProfile(EditSchoolProfile::class)

@@ -36,6 +36,11 @@ class ManageMailSettings extends Page
 
     public ?array $data = [];
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->isAdmin() ?? false;
+    }
+
     public function mount(): void
     {
         /** @var School $school */

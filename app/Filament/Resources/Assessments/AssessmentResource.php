@@ -26,6 +26,11 @@ class AssessmentResource extends Resource
     protected static ?string $label = 'Lista de simulados';
     protected static ?string $navigationLabel = 'Simulados';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canManage() ?? false;
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
