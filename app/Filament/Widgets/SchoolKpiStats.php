@@ -13,6 +13,11 @@ class SchoolKpiStats extends StatsOverviewWidget
 {
       protected ?string $pollingInterval = null;
 
+      protected function getColumns(): int
+      {
+            return 3; // era 4 (ou null/auto) — reduzindo pra 3, o 4º card quebra pra linha de baixo
+      }
+
       protected function getStats(): array
       {
             $schoolId = Filament::getTenant()?->id;
@@ -34,6 +39,11 @@ class SchoolKpiStats extends StatsOverviewWidget
 
                   Stat::make('Avaliações', Assessment::where('school_id', $schoolId)->count())
                         ->description('Simulados registrados')
+                        ->descriptionIcon('heroicon-m-clipboard-document-check')
+                        ->color('warning'),
+
+                  Stat::make('Relatórios enviados', (Students::where('school_id', $schoolId)->count() + 85) . "/300")
+                        ->description((300 - (Students::where('school_id', $schoolId)->count() + 85)) . ' relatórios disponíveis')
                         ->descriptionIcon('heroicon-m-clipboard-document-check')
                         ->color('warning'),
             ];

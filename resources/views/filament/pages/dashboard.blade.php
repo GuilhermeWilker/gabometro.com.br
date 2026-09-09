@@ -3,6 +3,11 @@
         {{-- Header fino --}}
         <div class="mb-4 flex items-end justify-between gap-3">
             <div>
+                <div class="my-2">
+                    <p>Seu plano atual: <span
+                            class="w-fit text-sm p-1 px-4 border border-indigo-700 rounded-2xl bg-indigo-700 text-white cursor-pointer">Starter</span>
+                    </p>
+                </div>
                 <h2
                     class="text-3xl md:text-7xl mb-4 font-black text-gray-900 dark:text-white underline decoration-indigo-600 decoration-4 decoration-wavy underline-offset-8">
                     {{ $this->getSchoolMeta()['name'] }}

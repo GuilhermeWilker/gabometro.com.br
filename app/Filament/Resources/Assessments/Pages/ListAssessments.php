@@ -6,6 +6,7 @@ use App\Filament\Resources\Assessments\AssessmentResource;
 use App\Imports\AssessmentResultsImport;
 use App\Jobs\ImportAssessmentResults;
 use App\Models\ClassRoom;
+use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
@@ -20,7 +21,9 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ListAssessments extends ListRecords
 {
@@ -36,6 +39,29 @@ class ListAssessments extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('downloadTemplate')
+                ->label('Baixar planilha modelo')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('gray')
+                ->outlined()
+                ->action(function (): StreamedResponse {
+                    $path = 'templates/resultados-modelo.xlsx';
+
+                    abort_unless(
+                        Storage::disk('local')->exists($path)
+                            || Storage::disk('public')->exists($path),
+                        404,
+                        'Planilha modelo não encontrada.'
+                    );
+
+                    $disk = Storage::disk('local')->exists($path) ? 'local' : 'public';
+
+                    return Storage::disk($disk)->download(
+                        $path,
+                        'gabometro-planilha-modelo.xlsx'
+                    );
+                }),
+
             CreateAction::make()
                 ->label("Criar um novo simulado")
                 ->icon(Heroicon::Plus)

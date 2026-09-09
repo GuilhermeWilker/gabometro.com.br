@@ -5,116 +5,111 @@
     <meta charset="utf-8">
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 12px;
-            color: #111;
+            font-family: DejaVu Sans, Arial, sans-serif;
+            margin: 40px;
+            padding-left: 60px;
+            padding-top: 40px;
+            color: #333;
         }
 
         .header {
-            border-bottom: 2px solid #4f46e5;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
         }
 
         .title {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: bold;
-            color: #4f46e5;
+            color: #2c3e50;
         }
 
-        .meta {
-            margin-top: 6px;
+        .subtitle {
+            font-size: 14px;
             color: #555;
         }
 
-        .card {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 14px;
-            margin-bottom: 16px;
-        }
-
-        .score {
-            font-size: 28px;
-            font-weight: bold;
-            color: #4f46e5;
+        .info {
+            margin-bottom: 20px;
+            font-size: 16px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th,
-        td {
-            border: 1px solid #e5e7eb;
-            padding: 8px;
-            text-align: left;
+            margin-top: 20px;
         }
 
         th {
-            background: #f3f4f6;
+            background: #2c3e50;
+            color: #fff;
+            padding: 10px;
+            text-align: left;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        .box {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 25px;
+            font-size: 16px;
         }
 
         .footer {
-            margin-top: 30px;
-            font-size: 10px;
-            color: #6b7280;
-            text-align: center;
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            font-size: 12px;
+            color: #777;
         }
     </style>
 </head>
 
 <body>
     <div class="header">
-        <div class="title">{{ $school->name }}</div>
-        <div class="meta">Relatório de desempenho — Gabômetro</div>
+        <div class="title">Relatório de Desempenho do Aluno</div>
+        <div class="subtitle">Sistema de Avaliação Escolar</div>
     </div>
 
-    <div class="card">
-        <strong>Aluno:</strong> {{ $student->name }}<br>
+    <div class="info">
         <strong>Matrícula:</strong> {{ $student->registration_number }}<br>
-        <strong>Turma:</strong>
-        {{ $student->classRoom?->grade_level }} {{ $student->classRoom?->section }}<br>
-        <strong>Prova:</strong> {{ $assessment->name }}<br>
-        <strong>Data:</strong> {{ $assessment->assessment_date?->format('d/m/Y') }}
+        <strong>Nome:</strong> {{ $student->name }}
     </div>
 
-    <div class="card">
-        <div>Desempenho geral</div>
-        <div class="score">{{ $percentage }}%</div>
-        <div>
-            Acertos: {{ $result->correct_answers }}
-            · Erros: {{ $result->incorrect_answers }}
-            · Total: {{ $result->total_questions }}
-        </div>
-    </div>
-
-    <div class="card">
-        <strong>Desempenho por disciplina</strong>
-        <table>
-            <thead>
+    <table>
+        <thead>
+            <tr>
+                <th>Disciplina</th>
+                <th style="text-align: right; width: 80px;">Acertos</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($subjects as $subject)
                 <tr>
-                    <th>Disciplina</th>
-                    <th>Abreviação</th>
-                    <th>Acertos</th>
+                    <td>{{ $subject->abbreviation }}</td>
+                    <td style="text-align: center;">{{ $subject->pivot->correct_answers }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach ($subjects as $subject)
-                    <tr>
-                        <td>{{ $subject->name ?? '—' }}</td>
-                        <td>{{ $subject->abbreviation }}</td>
-                        <td>{{ $subject->pivot->correct_answers }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+            @endforeach
+        </tbody>
+    </table>
+
+    <div class="box">
+        <strong>Total de Acertos:</strong> {{ $result->correct_answers }}<br>
+        <strong>Total de Erros:</strong> {{ $result->incorrect_answers }}
     </div>
 
     <div class="footer">
-        Documento gerado automaticamente pelo Gabômetro em {{ now()->format('d/m/Y H:i') }}
+        Gerado em: {{ now()->format('d/m/Y') }}
     </div>
 </body>
 
