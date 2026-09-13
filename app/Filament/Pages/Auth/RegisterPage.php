@@ -4,9 +4,11 @@ namespace App\Filament\Pages\Auth;
 
 use DiogoGPinto\AuthUIEnhancer\Pages\Auth\Concerns\HasCustomLayout;
 use Filament\Auth\Pages\Register;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\HtmlString;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterPage extends Register
@@ -44,6 +46,14 @@ class RegisterPage extends Register
                     ->revealable()
                     ->required()
                     ->dehydrated(false),
+
+                Checkbox::make('terms')
+                    ->label(new HtmlString(
+                        'Li e aceito os <a href="' . route('terms') . '" target="_blank" class="underline">Termos de uso</a> e a <a href="' . route('privacy') . '" target="_blank" class="underline">Política de privacidade</a>.'
+                    ))
+                    ->accepted()
+                    ->required()
+                    ->dehydrated(false)
             ]);
     }
 

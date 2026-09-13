@@ -4,9 +4,9 @@ use App\Models\AssessmentResult;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-Route::get('/', function () {
-    return view('landing');
-})->name('landing');
+Route::view('/', 'landing')->name('home');
+Route::view('/privacidade', 'legal.privacy')->name('privacy');
+Route::view('/termos', 'legal.terms')->name('terms');
 
 Route::get("/pdf", function () {
     return view('pdf-view');

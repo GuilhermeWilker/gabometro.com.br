@@ -119,7 +119,7 @@
     {{-- Nav --}}
     <header class="sticky top-0 z-50 border-b border-[var(--border)] bg-white/85 backdrop-blur">
         <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-            <a href="{{ route('landing') }}"
+            <a href="{{ route('home') }}"
                 class="flex items-center gap-2 font-semibold tracking-tight text-[var(--ink)]">
                 {{-- <span
                     class="inline-flex h-7 w-7 items-center justify-center rounded bg-[var(--brand)] text-sm font-bold text-white">G</span>
@@ -526,12 +526,31 @@
         </div>
     </section>
 
+    <div x-data="{ show: !localStorage.getItem('cookie_ok') }" x-show="show"
+        class="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-lg rounded-xl border bg-white p-4 shadow-lg sm:left-auto">
+        <p class="text-sm text-neutral-600">
+            Usamos cookies essenciais e, com seu consentimento, de análise.
+            <a href="{{ route('privacy') }}" class="underline">Privacidade</a>
+        </p>
+        <div class="mt-3 flex gap-2">
+            <button type="button" class="btn-brand rounded-lg px-3 py-1.5 text-sm"
+                @click="localStorage.setItem('cookie_ok','1'); show=false; /* carregar GA aqui */">
+                Aceitar
+            </button>
+            <button type="button" class="btn-outline rounded-lg px-3 py-1.5 text-sm"
+                @click="localStorage.setItem('cookie_ok','0'); show=false">
+                Só essenciais
+            </button>
+        </div>
+    </div>
+
     <footer class="boxed py-10">
         <div class="flex flex-col items-center justify-between gap-4 text-sm text-neutral-500 sm:flex-row">
-            <p>© {{ date('Y') }} Gabômetro. Relatórios de simulados para escolas.</p>
-            <div class="flex gap-6">
+            <p>© {{ date('Y') }} Gabômetro</p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="{{ route('privacy') }}" class="hover:text-neutral-800">Privacidade</a>
+                <a href="{{ route('terms') }}" class="hover:text-neutral-800">Termos</a>
                 <a href="{{ url('/admin/login') }}" class="hover:text-neutral-800">Entrar</a>
-                <a href="#precos" class="hover:text-neutral-800">Preços</a>
             </div>
         </div>
     </footer>
