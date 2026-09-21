@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AsaasWebhookController;
 use App\Models\AssessmentResult;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +12,9 @@ Route::view('/termos', 'legal.terms')->name('terms');
 Route::get("/pdf", function () {
     return view('pdf-view');
 });
+
+Route::post('/webhook/asaas', [AsaasWebhookController::class, 'handle'])
+    ->name('webhook.asaas');
 
 Route::get('/admin/results/{result}/pdf', function (AssessmentResult $result) {
     abort_unless(

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,23 +17,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(4)->create();
-
-        // $this->call([
-        //     ClassRoomSeeder::class,
-        //     StudentSeeder::class,
-        // ]);
-
-        User::factory()->create([
-            'name' => 'Guilherme Wilker',
-            'email' => "wilkerguilherme0" . Env::get('MAIL_DOMAIN'),
-            'role' => 'Administrador',
+        Plan::create([
+            'name' => 'Starter',
+            'slug' => 'starter',
+            'report_limit' => 300,
+            'price' => 349,
+            'is_active' => true
         ]);
 
-        User::factory()->create([
-            'name' => 'pedro guliver',
-            'email' => "pg" . Env::get('MAIL_DOMAIN'),
-            'role' => 'Professor',
+        Plan::create([
+            'name' => 'Premium',
+            'slug' => 'premium',
+            'report_limit' => 900,
+            'price' => 548,
+            'is_active' => true
         ]);
     }
 }

@@ -43,4 +43,9 @@ class School extends Model
     {
         return $this->hasMany(Subject::class);
     }
+
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class);
+    }
 }
