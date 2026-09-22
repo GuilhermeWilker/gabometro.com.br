@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\RegisterPage;
+use App\Filament\Pages\Billing\ManageSubscription;
 use App\Filament\Pages\LoginPage;
 use App\Filament\Pages\Tenancy\EditSchoolProfile;
 use App\Filament\Pages\Tenancy\RegisterSchool;
@@ -65,7 +66,9 @@ class AdminPanelProvider extends PanelProvider
             ->spa()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
-            ->pages([])
+            ->pages([
+                ManageSubscription::class
+            ])
             ->breadcrumbs(false)
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([

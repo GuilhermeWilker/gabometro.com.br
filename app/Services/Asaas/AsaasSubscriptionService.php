@@ -73,16 +73,16 @@ class AsaasSubscriptionService
                         ])
                         ->json();
 
-                  $status = strtolower((string) ($response['status'] ?? 'pending'));
-
                   return Subscription::query()->updateOrCreate(
                         ['school_id' => $school->id],
                         [
                               'plan_id' => $plan->id,
                               'asaas_customer_id' => $customerId,
                               'asaas_subscription_id' => $response['id'],
-                              'status' => $status,
+                              // MVP: só libera no webhook de pagamento
+                              'status' => 'pending',
                               'billing_type' => $billingType,
+                              'current_period_end' => null,
                         ]
                   );
             });

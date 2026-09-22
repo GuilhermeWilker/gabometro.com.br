@@ -5,7 +5,11 @@
             <div>
                 <div class="my-2">
                     <p>Seu plano atual: <span
-                            class="w-fit text-sm p-1 px-4 border border-indigo-700 rounded-2xl bg-indigo-700 text-white cursor-pointer">Starter</span>
+                            class="w-fit text-sm p-1 px-4 border border-indigo-700 rounded-2xl bg-indigo-700 text-white cursor-pointer">
+
+                            {{ auth()->user()->schools->first()?->subscription?->plan?->name ?? 'Plano não encontrado' }}
+
+                        </span>
                     </p>
                 </div>
                 <h2

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Webhooks;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
@@ -57,7 +57,7 @@ class AsaasWebhookController extends Controller
         $status = match ($event) {
             'PAYMENT_RECEIVED', 'PAYMENT_CONFIRMED' => 'active',
             'PAYMENT_OVERDUE' => 'overdue',
-            'PAYMENT_DELETED', 'PAYMENT_REFUNDED' => $subscription->status,
+            'PAYMENT_CREATED' => 'pending',
             'SUBSCRIPTION_DELETED', 'SUBSCRIPTION_INACTIVATED' => 'canceled',
             default => null,
         };
