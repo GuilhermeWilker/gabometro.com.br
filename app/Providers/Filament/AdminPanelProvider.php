@@ -10,6 +10,7 @@ use App\Filament\Pages\Tenancy\RegisterSchool;
 use App\Filament\Widgets\LatestAssessments;
 use App\Filament\Widgets\SchoolStatsOverview;
 use App\Filament\Widgets\SubjectPerformanceChart;
+use App\Http\Middleware\EnsureSchoolSubscriptionIsActive;
 use App\Models\School;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Enums\UserMenuPosition;
@@ -89,7 +90,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])->navigationGroups([
+            ])
+            ->tenantMiddleware([
+                EnsureSchoolSubscriptionIsActive::class,
+            ], isPersistent: true)
+            ->navigationGroups([
                 NavigationGroup::make()
                     ->label('Schhool')
                     ->icon(Heroicon::BuildingOffice2),

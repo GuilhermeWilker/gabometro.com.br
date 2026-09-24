@@ -48,4 +48,16 @@ class School extends Model
     {
         return $this->hasOne(Subscription::class);
     }
+
+    public function hasActiveSubscription(): bool
+    {
+        return $this->subscription()
+            ->where('status', 'active')
+            ->exists();
+    }
+
+    public function subscriptionStatus(): ?string
+    {
+        return $this->subscription?->status;
+    }
 }

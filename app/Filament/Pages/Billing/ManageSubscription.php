@@ -35,6 +35,22 @@ class ManageSubscription extends Page
 
     public ?array $latestPayment = null;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        $tenant = Filament::getTenant();
+
+        if (! $tenant) {
+            return false;
+        }
+
+        // Billing sempre visível
+        if (static::class === \App\Filament\Pages\Billing\ManageSubscription::class) {
+            return true;
+        }
+
+        return $tenant->hasActiveSubscription();
+    }
+
     public static function canAccess(): bool
     {
         $user = auth()->user();
